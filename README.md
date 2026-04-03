@@ -1295,6 +1295,158 @@ class CardsScreen extends StatelessWidget {
     );
   }
 }
+
+-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const CardApp());
+}
+
+class CardApp extends StatelessWidget {
+  const CardApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const InputScreen(),
+    );
+  }
+}
+
+class InputScreen extends StatefulWidget {
+  const InputScreen({super.key});
+
+  @override
+  State<InputScreen> createState() => _InputScreenState();
+}
+
+class _InputScreenState extends State<InputScreen> {
+  final TextEditingController controller = TextEditingController();
+
+  // Best Practice: Dispose of controllers to prevent memory leaks
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void goToCardsPage() {
+    // tryParse handles empty strings or non-numeric input gracefully
+    int? count = int.tryParse(controller.text);
+
+    if (count == null || count <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid number greater than 0')),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CardsScreen(cardCount: count),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dynamic Cards Generator'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Number of Cards',
+                hintText: 'e.g. 10',
+                prefixIcon: Icon(Icons.style),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: goToCardsPage,
+                child: const Text('Generate Cards'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CardsScreen extends StatelessWidget {
+  final int cardCount;
+  
+  // Making random a static final or local variable is fine, 
+  // but let's keep it clean within the build process.
+  CardsScreen({super.key, required this.cardCount});
+
+  final Random random = Random();
+
+  Color getRandomColor() {
+    return Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('$cardCount Cards Generated'),
+        backgroundColor: Colors.green,
+      ),
+      body: ListView.builder(
+        itemCount: cardCount,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        itemBuilder: (context, index) {
+          return Card(
+            color: getRandomColor(),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.white24,
+                child: Text('${index + 1}', style: const TextStyle(color: Colors.white)),
+              ),
+              title: Text(
+                'Card Item ${index + 1}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: const Text('Randomly generated color', style: TextStyle(color: Colors.white70)),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 ```
 
 ---
