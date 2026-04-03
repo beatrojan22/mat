@@ -1646,114 +1646,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
--X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-
-
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const NotesApp());
-}
-
-class NotesApp extends StatelessWidget {
-  const NotesApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: const NotesScreen(),
-    );
-  }
-}
-
-class NotesScreen extends StatefulWidget {
-  const NotesScreen({super.key});
-
-  @override
-  State<NotesScreen> createState() => _NotesScreenState();
-}
-
-class _NotesScreenState extends State<NotesScreen> {
-  final TextEditingController noteController = TextEditingController();
-  
-  // We store the note in a String variable instead of a file
-  String savedNote = 'No saved note found';
-
-  void saveNote() {
-    if (noteController.text.isNotEmpty) {
-      setState(() {
-        savedNote = noteController.text;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Note Saved to Memory!')),
-      );
-      noteController.clear();
-    }
-  }
-
-  void readNote() {
-    // In this version, the note is already updated in the UI via setState
-    // but we can trigger a visual refresh or show a message.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Note loaded from memory')),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notes App (Web Friendly)'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: noteController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: 'Enter your note',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: saveNote,
-                  child: const Text('Save Note'),
-                ),
-                ElevatedButton(
-                  onPressed: readNote,
-                  child: const Text('Refresh View'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Saved Note:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            const Divider(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  savedNote,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 ```
 
 ---
@@ -1872,6 +1764,116 @@ class _NotesScreenState extends State<NotesScreen> {
     );
   }
 }
+
+-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const NotesApp());
+}
+
+class NotesApp extends StatelessWidget {
+  const NotesApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      home: const NotesScreen(),
+    );
+  }
+}
+
+class NotesScreen extends StatefulWidget {
+  const NotesScreen({super.key});
+
+  @override
+  State<NotesScreen> createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  final TextEditingController noteController = TextEditingController();
+  
+  // We store the note in a String variable instead of a file
+  String savedNote = 'No saved note found';
+
+  void saveNote() {
+    if (noteController.text.isNotEmpty) {
+      setState(() {
+        savedNote = noteController.text;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Note Saved to Memory!')),
+      );
+      noteController.clear();
+    }
+  }
+
+  void readNote() {
+    // In this version, the note is already updated in the UI via setState
+    // but we can trigger a visual refresh or show a message.
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Note loaded from memory')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notes App (Web Friendly)'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: noteController,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                labelText: 'Enter your note',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: saveNote,
+                  child: const Text('Save Note'),
+                ),
+                ElevatedButton(
+                  onPressed: readNote,
+                  child: const Text('Refresh View'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              'Saved Note:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const Divider(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  savedNote,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 ```
 
 ---
@@ -2153,5 +2155,154 @@ class _StudentScreenState extends State<StudentScreen> {
       ),
     );
   }
+
+-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const StudentApp());
+}
+
+class StudentApp extends StatelessWidget {
+  const StudentApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: StudentScreen(),
+    );
+  }
+}
+
+class StudentScreen extends StatefulWidget {
+  const StudentScreen({super.key});
+
+  @override
+  State<StudentScreen> createState() => _StudentScreenState();
+}
+
+class _StudentScreenState extends State<StudentScreen> {
+  // Replacing SQLite with a simple List for DartPad compatibility
+  List<Map<String, dynamic>> students = [];
+
+  final idController = TextEditingController();
+  final nameController = TextEditingController();
+  final addressController = TextEditingController();
+  final contactController = TextEditingController();
+
+  void addStudent() {
+    if (idController.text.isEmpty || nameController.text.isEmpty) return;
+
+    setState(() {
+      students.add({
+        'id': int.parse(idController.text),
+        'name': nameController.text,
+        'address': addressController.text,
+        'contact': contactController.text,
+      });
+    });
+    clearFields();
+  }
+
+  void updateStudent() {
+    int targetId = int.parse(idController.text);
+    setState(() {
+      int index = students.indexWhere((s) => s['id'] == targetId);
+      if (index != -1) {
+        students[index] = {
+          'id': targetId,
+          'name': nameController.text,
+          'address': addressController.text,
+          'contact': contactController.text,
+        };
+      }
+    });
+    clearFields();
+  }
+
+  void deleteStudent(int id) {
+    setState(() {
+      students.removeWhere((s) => s['id'] == id);
+    });
+  }
+
+  void clearFields() {
+    idController.clear();
+    nameController.clear();
+    addressController.clear();
+    contactController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Student Records (In-Memory)'),
+        backgroundColor: Colors.indigo,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            TextField(
+              controller: idController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Student ID'),
+            ),
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: addressController,
+              decoration: const InputDecoration(labelText: 'Address'),
+            ),
+            TextField(
+              controller: contactController,
+              decoration: const InputDecoration(labelText: 'Contact'),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(onPressed: addStudent, child: const Text('Add')),
+                ElevatedButton(onPressed: updateStudent, child: const Text('Update')),
+              ],
+            ),
+            const Divider(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: students.length,
+                itemBuilder: (context, index) {
+                  final student = students[index];
+                  return ListTile(
+                    title: Text(student['name']),
+                    subtitle: Text('ID: ${student['id']} | ${student['address']}'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => deleteStudent(student['id']),
+                    ),
+                    onTap: () {
+                      idController.text = student['id'].toString();
+                      nameController.text = student['name'];
+                      addressController.text = student['address'];
+                      contactController.text = student['contact'];
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
 }
 
