@@ -952,6 +952,173 @@ class _PrimeScreenState extends State<PrimeScreen> {
     );
   }
 }
+
+-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const PrimeApp());
+}
+
+class PrimeApp extends StatelessWidget {
+  const PrimeApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: const PrimeScreen(),
+    );
+  }
+}
+
+class PrimeScreen extends StatefulWidget {
+  const PrimeScreen({super.key});
+
+  @override
+  State<PrimeScreen> createState() => _PrimeScreenState();
+}
+
+class _PrimeScreenState extends State<PrimeScreen> {
+  final TextEditingController lowerController = TextEditingController();
+  final TextEditingController upperController = TextEditingController();
+
+  List<int> primes = [];
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    lowerController.dispose();
+    upperController.dispose();
+    super.dispose();
+  }
+
+  // Use SnackBar instead of Local Notifications for DartPad/Web compatibility
+  void showFinishedNotification() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Prime Calculation Done ✅'),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  bool isPrime(int n) {
+    if (n <= 1) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    for (int i = 3; i * i <= n; i += 2) {
+      if (n % i == 0) return false;
+    }
+    return true;
+  }
+
+  Future<void> findPrimesAsync(int low, int high) async {
+    setState(() {
+      isLoading = true;
+      primes.clear();
+    });
+
+    // Simulate heavy lifting
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    List<int> result = [];
+    for (int i = low; i <= high; i++) {
+      if (isPrime(i)) {
+        result.add(i);
+      }
+    }
+
+    setState(() {
+      primes = result;
+      isLoading = false;
+    });
+
+    showFinishedNotification();
+  }
+
+  void startCalculation() {
+    // Safety check: Ensure inputs are not empty and are valid numbers
+    final int? low = int.tryParse(lowerController.text);
+    final int? high = int.tryParse(upperController.text);
+
+    if (low == null || high == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter valid numbers')),
+      );
+      return;
+    }
+
+    findPrimesAsync(low, high);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Prime Number Finder'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: lowerController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Lower Range',
+                prefixIcon: Icon(Icons.arrow_downward),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: upperController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Upper Range',
+                prefixIcon: Icon(Icons.arrow_upward),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : startCalculation,
+                child: const Text('Find Primes'),
+              ),
+            ),
+            const SizedBox(height: 20),
+            if (isLoading)
+              const CircularProgressIndicator()
+            else
+              Expanded(
+                child: primes.isEmpty 
+                  ? const Center(child: Text("No primes found or calculation not started."))
+                  : ListView.builder(
+                      itemCount: primes.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            leading: const Icon(Icons.star, color: Colors.amber),
+                            title: Text('Prime: ${primes[index]}'),
+                          ),
+                        );
+                      },
+                    ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ---
