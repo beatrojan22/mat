@@ -1645,6 +1645,115 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const NotesApp());
+}
+
+class NotesApp extends StatelessWidget {
+  const NotesApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      home: const NotesScreen(),
+    );
+  }
+}
+
+class NotesScreen extends StatefulWidget {
+  const NotesScreen({super.key});
+
+  @override
+  State<NotesScreen> createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  final TextEditingController noteController = TextEditingController();
+  
+  // We store the note in a String variable instead of a file
+  String savedNote = 'No saved note found';
+
+  void saveNote() {
+    if (noteController.text.isNotEmpty) {
+      setState(() {
+        savedNote = noteController.text;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Note Saved to Memory!')),
+      );
+      noteController.clear();
+    }
+  }
+
+  void readNote() {
+    // In this version, the note is already updated in the UI via setState
+    // but we can trigger a visual refresh or show a message.
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Note loaded from memory')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notes App (Web Friendly)'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: noteController,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                labelText: 'Enter your note',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: saveNote,
+                  child: const Text('Save Note'),
+                ),
+                ElevatedButton(
+                  onPressed: readNote,
+                  child: const Text('Refresh View'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              'Saved Note:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const Divider(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  savedNote,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 ```
 
 ---
