@@ -267,6 +267,122 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
+
+-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const SmartLoginApp());
+}
+
+class SmartLoginApp extends StatelessWidget {
+  const SmartLoginApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const LoginForm(),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  bool isButtonEnabled = false;
+
+  // Best Practice: Always dispose controllers to save memory
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void validateForm() {
+    setState(() {
+      // Basic validation logic
+      isButtonEnabled =
+          emailController.text.contains('@') &&
+          passwordController.text.length >= 6;
+    });
+  }
+
+  void showNotification() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Great! You typed a real email! 😊"),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Smart Login Form"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: emailController,
+              onChanged: (_) => validateForm(),
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: passwordController,
+              onChanged: (_) => validateForm(),
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: double.infinity, // Makes the button full-width
+              height: 50,
+              child: ElevatedButton(
+                onPressed: isButtonEnabled ? showNotification : null,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text("Login"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ---
